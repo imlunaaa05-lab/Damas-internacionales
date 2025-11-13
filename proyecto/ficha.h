@@ -10,3 +10,4 @@ struct Ficha {
 };
 
 #endif // FICHA_H
+
