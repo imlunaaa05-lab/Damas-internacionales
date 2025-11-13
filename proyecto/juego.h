@@ -1,4 +1,4 @@
-// Juego.h (versión mínima compatible)
+
 #ifndef JUEGO_H
 #define JUEGO_H
 
@@ -14,7 +14,6 @@ public:
     void mostrarEstadisticas();
     void mostrarInstrucciones();
 
-    // Pausa (versión mínima: no guarda tablero completo)
     bool menuPausa();
 
 
@@ -28,3 +27,4 @@ private:
 };
 
 #endif
+
