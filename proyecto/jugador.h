@@ -30,5 +30,6 @@ public:
     void mostrarEstadisticas() const;
 };
 
-#endif // JUGADOR_H
+#endif 
+
 
