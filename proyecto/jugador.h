@@ -13,7 +13,6 @@ private:
     int empates;
 
 public:
-    // Constructor con nombre, símbolo y color
     Jugador(const std::string& n = "", char s = '.', const std::string& c = "");
 
     std::string getNombre() const;
@@ -32,3 +31,4 @@ public:
 };
 
 #endif // JUGADOR_H
+
