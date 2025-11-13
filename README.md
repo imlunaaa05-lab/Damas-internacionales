@@ -1,14 +1,15 @@
 Nombre de los integrantes:
 Lorduy Ayus Samir Elias y Joel Santiago Sarmiento Baldayo
 
-## Desarrollos innovadores implementados
+# Desarrollos innovadores implementados
 1. Menú de pausa en medio de la partida con opción de regresar al juego o salir al menú principal.
 2. Interfaz visual con colores ANSI elegibles para cada jugador, hecha para distinguir fichas y turnos.
 3. Guardado de estadísticas básicas de jugadores (victorias, derrotas, empates).
 4. Validaciones de entrada robustas para evitar errores de usuario.
 
 
-Innovación 1 — Menú de pausa
+
+## Innovación 1 — Menú de pausa
 ¿Para qué se implementó?
 Se implemento para permitir a los jugadores detener la partida temporalmente, decidir si quieren continuar o volver al menú principal; posibilitar operaciones relacionadas (guardado, carga o configuración) desde un estado pausado.
 
@@ -23,7 +24,8 @@ Si se detecta 'P', se invoca menuPausa() que muestra un submenú con opciones (e
 El retorno de menuPausa() informa al bucle principal si debe continuar o abandonar la partida.
 
 
-Innovación 2 — Colores ANSI
+
+## Innovación 2 — Colores ANSI
 ¿Para qué se implementó?
 Se implemento para mejorar la legibilidad del tablero en consola y distinguir visualmente las fichas y el turno actual mediante colores.
 
@@ -38,7 +40,8 @@ En mostrar(), se imprime cada celda con el color del símbolo si hay ficha; en c
 
 
 
-Innovación 3 — Validaciones de entrada
+
+## Innovación 3 — Validaciones de entrada
 ¿Para qué se implementó?
 Se implemento para evitar que entradas inválidas rompan el flujo del juego (por ejemplo, caracteres donde se esperan enteros) y ofrecer al usuario retroalimentación clara.
 
