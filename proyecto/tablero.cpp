@@ -1,4 +1,4 @@
-// Tablero.cpp
+
 #include "Tablero.h"
 #include <cmath>
 #include <iostream>
@@ -27,7 +27,6 @@ bool Tablero::dentro(int f, int c) {
 }
 
 void Tablero::inicializar(int) {
-    // limpiar tablero
     for (int f = 0; f < 10; f++) {
         for (int c = 0; c < 10; c++) {
             celdas[f][c].simbolo = '.';
@@ -35,7 +34,7 @@ void Tablero::inicializar(int) {
         }
     }
 
-    // Fichas de B (arriba): filas 0..3 en casillas "negras" (paridad 1)
+    
     for (int f = 0; f < 4; f++) {
         for (int c = 0; c < 10; c++) {
             if ((f + c) % 2 == 1) {
@@ -45,7 +44,7 @@ void Tablero::inicializar(int) {
         }
     }
 
-    // Fichas de A (abajo): filas 6..9 en casillas "negras"
+  
     for (int f = 6; f < 10; f++) {
         for (int c = 0; c < 10; c++) {
             if ((f + c) % 2 == 1) {
@@ -56,7 +55,7 @@ void Tablero::inicializar(int) {
     }
 }
 
-// ANSI helper (incluye algunas variantes "brillantes")
+
 static string ansiCodeForName(const string &name) {
     if (name == "rojo") return "\033[31m";
     if (name == "verde") return "\033[32m";
@@ -104,7 +103,7 @@ void Tablero::mostrar() {
     }
 }
 
-/* ---------- DETECCIÓN DE CAPTURAS ---------- */
+
 
 bool Tablero::puedeCapturarDesde(int f, int c) {
     if (!dentro(f,c)) return false;
@@ -112,7 +111,7 @@ bool Tablero::puedeCapturarDesde(int f, int c) {
     if (s == '.') return false;
     if (celdas[f][c].dama) return puedeCapturarDama(f,c);
 
-    // Peón en damas internacionales puede capturar en las 4 diagonales (adelante y atrás)
+    
     int df[4] = { 1, 1, -1, -1 };
     int dc[4] = { 1, -1, 1, -1 };
     char enemigo = (s == 'A') ? 'B' : 'A';
@@ -177,7 +176,7 @@ bool Tablero::puedeCapturarDama(int f, int c) {
     return false;
 }
 
-/* ---------- CAPTURAS PEÓN ---------- */
+
 
 bool Tablero::capturarPeon(int f1, int c1, int f2, int c2, char s) {
     if (!dentro(f1,c1) || !dentro(f2,c2)) return false;
@@ -193,7 +192,7 @@ bool Tablero::capturarPeon(int f1, int c1, int f2, int c2, char s) {
     if (celdas[mf][mc].simbolo != enemy) return false;
     if ((f2 + c2) % 2 == 0) return false; // landing debe ser casilla jugable
 
-    // ejecutar captura (preservando si era dama)
+   
     Celda moved = celdas[f1][c1];
     celdas[mf][mc].simbolo = '.';
     celdas[mf][mc].dama = false;
@@ -203,13 +202,13 @@ bool Tablero::capturarPeon(int f1, int c1, int f2, int c2, char s) {
     return true;
 }
 
-/* ---------- CAPTURA DAMA ---------- */
+
 
 bool Tablero::capturarDama(int f1, int c1, int f2, int c2, char s) {
     if (!dentro(f1,c1) || !dentro(f2,c2)) return false;
     if (celdas[f1][c1].simbolo != s) return false;
     if (celdas[f2][c2].simbolo != '.') return false;
-    if ((f2 + c2) % 2 == 0) return false; // landing debe ser jugable
+    if ((f2 + c2) % 2 == 0) return false;
 
     int df = f2 - f1;
     int dc = c2 - c1;
@@ -223,16 +222,16 @@ bool Tablero::capturarDama(int f1, int c1, int f2, int c2, char s) {
 
     int nf = f1 + stepF;
     int nc = c1 + stepC;
-    // recorrer hasta la celda destino (ambas coordenadas llegan al mismo final porque abs(df)==abs(dc))
+    
     while (nf != f2 && nc != c2) {
-        if (!dentro(nf,nc)) return false; // seguridad
+        if (!dentro(nf,nc)) return false; 
         char cur = celdas[nf][nc].simbolo;
         if (cur == enemy) {
-            if (encontrado) return false; // más de un enemigo en el camino -> inválido para una sola captura
+            if (encontrado) return false; 
             encontrado = true;
             ef = nf; ec = nc;
         } else if (cur != '.') {
-            return false; // obstrucción propia
+            return false; 
         }
         nf += stepF;
         nc += stepC;
@@ -240,7 +239,7 @@ bool Tablero::capturarDama(int f1, int c1, int f2, int c2, char s) {
 
     if (!encontrado) return false;
 
-    // ejecutar captura: eliminar enemigo y mover dama (preservando dama)
+    // aqui hay ejecutar captura: eliminar enemigo y mover dama (preservando dama)
     celdas[ef][ec].simbolo = '.';
     celdas[ef][ec].dama = false;
     Celda moved = celdas[f1][c1];
@@ -250,16 +249,16 @@ bool Tablero::capturarDama(int f1, int c1, int f2, int c2, char s) {
     return true;
 }
 
-/* ---------- MOVIMIENTO SIMPLE ---------- */
+
 
 bool Tablero::moverSimple(int f1, int c1, int f2, int c2, char s) {
     if (!dentro(f1,c1) || !dentro(f2,c2)) return false;
     if (celdas[f2][c2].simbolo != '.') return false;
-    if ((f2 + c2) % 2 == 0) return false; // solo casillas jugables
+    if ((f2 + c2) % 2 == 0) return false; 
 
-    // Peón (solo 1 paso hacia adelante en damas internacionales)
+
     if (!celdas[f1][c1].dama) {
-        int dir = (s == 'A' ? -1 : 1); // A sube (fila--), B baja (fila++)
+        int dir = (s == 'A' ? -1 : 1); 
         if (f2 == f1 + dir && abs(c2 - c1) == 1) {
             Celda moved = celdas[f1][c1];
             celdas[f2][c2] = moved;
@@ -270,7 +269,7 @@ bool Tablero::moverSimple(int f1, int c1, int f2, int c2, char s) {
         return false;
     }
 
-    // Dama: movimiento largo simple (camino libre)
+   
     int df = f2 - f1;
     int dc = c2 - c1;
     if (abs(df) != abs(dc) || df == 0) return false;
@@ -286,7 +285,7 @@ bool Tablero::moverSimple(int f1, int c1, int f2, int c2, char s) {
         nc += stepC;
     }
 
-    if ((f2 + c2) % 2 == 0) return false; // landing jugable
+    if ((f2 + c2) % 2 == 0) return false; 
     Celda moved = celdas[f1][c1];
     celdas[f2][c2] = moved;
     celdas[f1][c1].simbolo = '.';
@@ -294,19 +293,18 @@ bool Tablero::moverSimple(int f1, int c1, int f2, int c2, char s) {
     return true;
 }
 
-/* ---------- MOVIMIENTO PRINCIPAL -------- */
 
 int Tablero::moverFicha(int f1, int c1, int f2, int c2, char s) {
-    // Validaciones básicas
+
     if (!dentro(f1,c1) || !dentro(f2,c2)) return 0;
     if (celdas[f1][c1].simbolo != s) return 0;
     if (celdas[f2][c2].simbolo != '.') return 0;
-    if ((f2 + c2) % 2 == 0) return 0; // casilla clara inválida
+    if ((f2 + c2) % 2 == 0) return 0; 
 
     bool capturaObligatoria = jugadorTieneCapturas(s);
     bool esDama = celdas[f1][c1].dama;
 
-    // Dama
+   
     if (esDama) {
         if (capturarDama(f1,c1,f2,c2,s)) {
             return puedeCapturarDama(f2,c2) ? 3 : 2;
@@ -315,20 +313,20 @@ int Tablero::moverFicha(int f1, int c1, int f2, int c2, char s) {
         return 0;
     }
 
-    // Peón: intentar captura (puede ser en cualquiera de las 4 diagonales)
+   
     if (capturarPeon(f1,c1,f2,c2,s)) {
         if (puedeCapturarDesde(f2,c2)) return 3;
         coronar(f2,c2,s);
         return 2;
     }
 
-    // Peón: movimiento simple (solo si no hay captura obligatoria)
+    
     if (!capturaObligatoria && moverSimple(f1,c1,f2,c2,s)) {
         coronar(f2,c2,s);
         return 1;
     }
 
-    // inválido
+    
     return 0;
 }
 
@@ -342,7 +340,6 @@ bool Tablero::verificarVictoria(char oponente) {
     return !jugadorTieneMovimientos(oponente);
 }
 
-/* ----------- Helpers ----------- */
 
 bool Tablero::jugadorTieneCapturas(char s) {
     for (int f = 0; f < 10; f++)
@@ -381,7 +378,6 @@ bool Tablero::jugadorTieneMovimientos(char s) {
     return false;
 }
 
-// Wrappers
 bool Tablero::moverDama(int f1, int c1, int f2, int c2, char s) {
     return moverSimple(f1,c1,f2,c2,s);
 }
@@ -389,3 +385,4 @@ bool Tablero::moverDama(int f1, int c1, int f2, int c2, char s) {
 bool Tablero::hayMovimientoDisponible(char s) {
     return jugadorTieneMovimientos(s);
 }
+
