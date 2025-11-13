@@ -1,4 +1,3 @@
-// Juego.cpp (versión mínima corregida)
 #include "Juego.h"
 #include <iostream>
 #include <fstream>
@@ -273,3 +272,4 @@ void Juego::mostrarEstadisticas() {
         cout << "Empates: " << j.getEmpates() << "\n\n";
     }
 }
+
